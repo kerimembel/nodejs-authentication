@@ -13,7 +13,7 @@ app.use(express.json());
 // Register
 app.post("/register", async (req, res) => {
 
-    // Our register logic starts here
+    // Register logic starts here
     try {
       // Get user input
       const { first_name, last_name, email, password } = req.body;
@@ -23,15 +23,14 @@ app.post("/register", async (req, res) => {
         res.status(400).send("All input is required");
       }
   
-      // check if user already exist
-      // Validate if user exist in our database
+      // Check if user already exist
       const oldUser = await User.findOne({ email });
   
       if (oldUser) {
         return res.status(409).send("User Already Exist. Please Login");
       }
   
-      //Encrypt user password
+      // Encrypt user password
       encryptedPassword = await bcrypt.hash(password, 10);
   
       // Create user in our database
@@ -50,21 +49,21 @@ app.post("/register", async (req, res) => {
           expiresIn: "2h",
         }
       );
-      // save user token
+      // Save user token
       user.token = token;
   
-      // return new user
+      // Return new user
       res.status(201).json(user);
     } catch (err) {
       console.log(err);
     }
-    // Our register logic ends here
+    // Register logic ends here
   });
 
 // Login
 app.post("/login", async (req, res) => {
 
-    // Our login logic starts here
+    // Login logic starts here
     try {
       // Get user input
       const { email, password } = req.body;
@@ -86,17 +85,17 @@ app.post("/login", async (req, res) => {
           }
         );
   
-        // save user token
+        // Save user token
         user.token = token;
   
-        // user
+        // Return User
         res.status(200).json(user);
       }
       res.status(400).send("Invalid Credentials");
     } catch (err) {
       console.log(err);
     }
-    // Our login logic ends here
+    // Login logic ends here
   });
 
 app.post("/welcome", auth, (req, res) => {
