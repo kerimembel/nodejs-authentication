@@ -1,1 +1,1 @@
-## Node.js Authentication Example
+## Node.js Authentication API
