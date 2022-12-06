@@ -2,11 +2,14 @@ require("dotenv").config();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { privateKey } = require('../config/jwt.config');
+const roles = require('../enum/roles');
+const status = require('../enum/user-status');
 
 class AuthController {
 
     constructor(_userService) {
         this.userService = _userService;
+        this.createAdminUser();
     }
 
     register = async (req, res) => {
@@ -30,7 +33,7 @@ class AuthController {
 
             // Create token
             const token = jwt.sign(
-                { user_id: user.body._id, role: role},
+                { user_id: user.body._id, role: user.body.role },
                 privateKey,
                 { algorithm: 'RS256', expiresIn: '1d' }
             );
@@ -55,7 +58,7 @@ class AuthController {
             const response = { status: true, user: user };
 
             if (user && (await bcrypt.compare(password, user.password))) {
-            
+
                 // Create token
                 const token = jwt.sign(
                     { user_id: user._id, role: user.role },
@@ -135,6 +138,24 @@ class AuthController {
         }
     }
 
+    async createAdminUser() {
+
+        const { ADMIN_EMAIL, ADMIN_PASSWORD } = process.env;
+        const body = {
+            first_name: "ADMIN",
+            last_name: "ADMIN",
+            email: ADMIN_EMAIL,
+            password: await bcrypt.hash(ADMIN_PASSWORD, 10),
+            role: roles.Admin,
+            status: status.Active
+        }
+        const result = await this.userService.create(body);
+        if (result.success) {
+            console.log("Admin user created");
+        } else {
+            console.log("Admin user already exists");
+        }
+    }
 }
 
 module.exports = AuthController;

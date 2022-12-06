@@ -1,1 +1,1 @@
-## Node.js Authentication API
+## Node.js Authentication Service

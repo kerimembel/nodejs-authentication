@@ -1,7 +1,7 @@
 {
-  "name": "nodejs-authentication",
+  "name": "file-upload-node",
   "version": "1.0.0",
-  "description": "JWT Authentication for Node.js",
+  "description": "Node.js server for ISG File Upload System.",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",

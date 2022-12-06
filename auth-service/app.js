@@ -1,6 +1,7 @@
 require("dotenv").config();
 require("./config/database.config").connect();
 const express = require("express");
+const bodyParser = require('body-parser');
 const expressValidator = require('express-validator')
 const cors = require('cors');
 
@@ -8,6 +9,8 @@ const app = express();
 
 app.use(cors());
 app.use(expressValidator());
+app.use(bodyParser.json());
+
 
 // Route for the auth operations
 app.use('/auth', require('./route/auth.route'));
